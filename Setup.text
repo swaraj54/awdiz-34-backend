@@ -1,0 +1,7 @@
+1. npm init -y
+2. type : module
+3. npm i express
+4. import and setup express in index.js file
+5. Create script -> "start" : node index.js
+6. use command npm start to start the server 
+7. install nodemon and configure it in package.json file
