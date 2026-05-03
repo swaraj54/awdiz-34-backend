@@ -15,12 +15,12 @@ export const Register = async (req, res) => {
     });
     console.log("New User:", newUser);
     await newUser.save();
-    res.status(201).json({
+    return res.status(201).json({
       message: "User registered successfully",
       user: { name, email, password, role },
     });
   } catch (error) {
-    res
+    return res
       .status(500)
       .json({ message: "Error registering user", error: error.message });
   }
