@@ -13,6 +13,19 @@ export const AllUsers = async (req, res) => {
   }
 };
 
+export const AllSellers = async (req, res) => {
+  try {
+    const sellers = await UserModel.find({ role: "seller" });
+
+    return res.status(200).json({ sellers });
+  } catch (error) {
+    console.log("Error fetching sellers:", error);
+    return res
+      .status(500)
+      .json({ message: "Error fetching sellers", error: error.message });
+  }
+};
+
 export const SingleUsers = async (req, res) => {
   try {
     const userId = req.params.id;

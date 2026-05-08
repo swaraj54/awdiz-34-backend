@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, model, mongo } from "mongoose";
 
 const ProductSchema = new Schema({
   name: { type: String, required: true },
@@ -7,6 +7,11 @@ const ProductSchema = new Schema({
   image: { type: String, required: true },
   category: { type: String, required: true },
   stock: { type: Number, required: true },
+  seller: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+    required: true,
+  },
 });
 
 const ProductModel = model("products", ProductSchema);

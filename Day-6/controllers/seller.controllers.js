@@ -2,10 +2,19 @@ import ProductModel from "../models/product.schema.js";
 
 export const addProduct = async (req, res) => {
   try {
-    const { name, price, description, image, category, stock } = req.body;
+    const { name, price, description, image, category, stock, userId } =
+      req.body;
 
     // Validate required fields
-    if (!name || !price || !description || !image || !category || !stock) {
+    if (
+      !name ||
+      !price ||
+      !description ||
+      !image ||
+      !category ||
+      !stock ||
+      !userId
+    ) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -16,6 +25,7 @@ export const addProduct = async (req, res) => {
       image: image,
       category: category,
       stock: stock,
+      seller: userId,
     });
     await newProduct.save();
     return res
@@ -28,7 +38,29 @@ export const addProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
   try {
+    const userId = req.query.userId;
+    const products = await ProductModel.find({ seller: userId }).populate(
+      "seller",
+      "name email",
+    );
+    return res.status(200).json({ products });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error", error });
+  }
+};
+
+export const updateProduct = async (req, res) => {
+  try {
     const products = await ProductModel.find();
+    for (let i = 0; i < products.length; i++) {
+      if (!products[i]?.seller) {
+        console.log("No seller found for product:", products[i]);
+        await ProductModel.findByIdAndUpdate(products[i]._id, {
+          seller: "",
+          // seller: "69f5bd9ba5cded8f3172d9ca",
+        });
+      }
+    }
     return res.status(200).json({ products });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error", error });

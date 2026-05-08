@@ -57,6 +57,7 @@ export const searchProducts = async (req, res) => {
       $or: [
         { name: { $regex: text, $options: "i" } },
         { description: { $regex: text, $options: "i" } },
+        { category: { $regex: text, $options: "i" } },
       ],
     });
     res.status(200).json({
