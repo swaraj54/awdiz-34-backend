@@ -1,0 +1,23 @@
+User
+-update profile
+-pagination
+-sorting
+-search
+
+auth
+bcrypt - hash compare
+jwt - sign verify 
+-register 
+-login - not completed - add token into cookies, store user data into redux like name, 
+-get-current-user - not completed - use token to send user data like name , image
+-logout - not completed  - remove token and user data from redux
+
+Seller
+-add product 
+-get products 
+
+Admin
+
+-get all users
+-get single user
+-get all sellers
