@@ -100,7 +100,31 @@ export const Login = async (req, res) => {
 
 export const getCurrentUser = async (req, res) => {
   try {
+    const token = req.cookies.token;
+    console.log("Token from cookies:", token);
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("Decoded Data:", decodedData);
+    const user = await UserModel.findById(decodedData.id).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const userData = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
+
+    return res.status(200).json({
+      success: true,
+      message: "Current user retrieved successfully",
+      user: userData,
+    });
   } catch (error) {
+    console.log(error);
     return res
       .status(500)
       .json({ message: "Error getting current user", error: error.message });
@@ -108,7 +132,17 @@ export const getCurrentUser = async (req, res) => {
 };
 
 export const Logout = (req, res) => {
-  res.send("User logged out successfully from controller.");
+  try {
+    res.clearCookie("token");
+    return res.status(200).json({
+      success: true,
+      message: "User logged out successfully",
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error logging out user", error: error.message });
+  }
 };
 
 export const UpdateUserPassword = async (req, res) => {
