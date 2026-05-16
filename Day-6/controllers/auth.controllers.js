@@ -78,7 +78,6 @@ export const Login = async (req, res) => {
     res.cookie("token", token);
 
     const userData = {
-      _id: user._id,
       name: user.name,
       email: user.email,
       role: user.role,
@@ -103,7 +102,7 @@ export const getCurrentUser = async (req, res) => {
     const token = req.cookies.token;
     console.log("Token from cookies:", token);
     if (!token) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ success: false, message: "Unauthorized" });
     }
     const decodedData = jwt.verify(token, process.env.JWT_SECRET);
     console.log("Decoded Data:", decodedData);
@@ -112,7 +111,6 @@ export const getCurrentUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     const userData = {
-      _id: user._id,
       name: user.name,
       email: user.email,
       role: user.role,

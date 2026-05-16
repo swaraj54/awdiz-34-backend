@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { verifyAndDecodeToken } from "./middlewares/tokenMiddlewares.js";
 
 const app = express();
 dotenv.config();
@@ -20,7 +21,7 @@ app.get("/", (req, res) => {
   res.send("Server is working..");
 });
 
-app.use("/api/v1", MainRouter);
+app.use("/api/v1", verifyAndDecodeToken, MainRouter);
 
 mongoose.connect(process.env.MONGODB_URL).then(() => {
   console.log("Connected to MongoDB.");
