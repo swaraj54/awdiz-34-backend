@@ -5,7 +5,11 @@ const ProductSchema = new Schema({
   price: { type: Number, required: true },
   description: { type: String, required: true },
   image: { type: String, required: true },
-  category: { type: String, required: true },
+  category: {
+    type: String,
+    required: true,
+    enum: ["clothing", "footwear", "electronics"],
+  },
   stock: { type: Number, required: true },
   seller: {
     type: mongoose.Schema.Types.ObjectId,

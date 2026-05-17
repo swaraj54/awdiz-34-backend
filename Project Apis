@@ -5,8 +5,7 @@ User
 -sorting
 -search
 
-auth - bcrypt - hash compare // jwt - sign verify 
-
+auth - bcrypt - hash compare // jwt - sign verify FUllY COMPLETED
 -register 
 -login -add token into cookies, store user data into redux like name, 
 -get-current-user - use token to send user data like name , image

@@ -2,8 +2,9 @@ import ProductModel from "../models/product.schema.js";
 
 export const addProduct = async (req, res) => {
   try {
-    const { name, price, description, image, category, stock, userId } =
-      req.body;
+    const { name, price, description, image, category, stock } = req.body;
+
+    const userId = req.userId;
 
     // Validate required fields
     if (
@@ -28,9 +29,11 @@ export const addProduct = async (req, res) => {
       seller: userId,
     });
     await newProduct.save();
-    return res
-      .status(201)
-      .json({ message: "Product added successfully", product: newProduct });
+    return res.status(201).json({
+      message: "Product added successfully",
+      product: newProduct,
+      success: true,
+    });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error", error });
   }
@@ -38,12 +41,12 @@ export const addProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
   try {
-    const userId = req.query.userId;
+    const userId = req.userId;
     const products = await ProductModel.find({ seller: userId }).populate(
       "seller",
       "name email",
     );
-    return res.status(200).json({ products });
+    return res.status(200).json({ products, success: true });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error", error });
   }
