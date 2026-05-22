@@ -1,6 +1,7 @@
 import UserModel from "../models/user.schema.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import CartModel from "../models/cart.schema.js";
 
 export const Profile = (req, res) => {
   try {
@@ -17,9 +18,57 @@ export const Profile = (req, res) => {
       .json({ message: "Error updating profile", error: error.message });
   }
 };
-export const Cart = (req, res) => {
-  res.send("User cart data from controller.");
+
+export const addToCart = async (req, res) => {
+  try {
+    const { productId } = req.body;
+    const userId = req.userId;
+    if (!productId) {
+      return res.status(400).json({ message: "Product ID is required" });
+    }
+    const existingCart = await CartModel.findOne({ user: userId });
+    if (existingCart) {
+      existingCart.products.push(productId);
+      await existingCart.save();
+      return res.status(200).json({
+        message: "Product added to cart",
+        cart: existingCart,
+        success: true,
+      });
+    } else {
+      const newCart = new CartModel({
+        user: userId,
+        products: [productId],
+      });
+      await newCart.save();
+      return res.status(200).json({
+        message: "Product added to cart",
+        cart: newCart,
+        success: true,
+      });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error updating profile", error: error.message });
+  }
 };
+
+export const getCartProduct = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const userProductsData = await CartModel.findOne({ user: userId }).populate(
+      "products",
+    );
+    return res.status(200).json({ success: true, userProductsData });
+  } catch (error) {
+    console.log(error, "error");
+    return res
+      .status(500)
+      .json({ message: "Error updating profile", error: error.message });
+  }
+};
+
 export const Orders = (req, res) => {
   res.send("User orders data from controller.");
 };

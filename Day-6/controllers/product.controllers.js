@@ -68,3 +68,30 @@ export const searchProducts = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const allProducts = async (req, res) => {
+  try {
+    const products = await ProductModel.find();
+    res.status(200).json({
+      message: "All products fetched successfully",
+      products,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const singleProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await ProductModel.findById(id);
+    return res.status(200).json({
+      success: true,
+      message: "Product fetched successfully",
+      product,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};

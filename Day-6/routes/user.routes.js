@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
-  Cart,
+  addToCart,
+  getCartProduct,
   Orders,
   Profile,
   UpdateProfile,
@@ -9,7 +10,8 @@ import {
 const UserRouter = Router();
 
 UserRouter.post("/profile", Profile);
-UserRouter.post("/cart", Cart);
+UserRouter.post("/add-to-cart", addToCart);
+UserRouter.get("/get-cart-products", getCartProduct);
 UserRouter.post("/orders", Orders);
 UserRouter.patch("/update-profile", UpdateProfile);
 // UserRouter.patch("/delete-acccount/:userId", DeleteAccount);
