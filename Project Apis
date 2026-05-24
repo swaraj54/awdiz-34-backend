@@ -4,6 +4,12 @@ User
 -pagination
 -sorting
 -search
+-get all product
+-single product
+-cart
+-orders
+Assignment - WishList page, Payment Page
+
 
 auth - bcrypt - hash compare // jwt - sign verify FUllY COMPLETED
 -register 
@@ -14,9 +20,13 @@ auth - bcrypt - hash compare // jwt - sign verify FUllY COMPLETED
 Seller
 -add product 
 -get products 
+-dashboard  - not completed
+-Order Page   - not completed
 
-Admin
+assignment - edit product , product approve system with admin
+
+Admin  - not completed
 
 -get all users
--get single user
 -get all sellers
+-get all products
