@@ -130,6 +130,10 @@ export const placeOrder = async (req, res) => {
 
 export const getOrders = async (req, res) => {
   try {
+    const userId = req.userId;
+    const orders = await OrderModel.find({ user: userId }).populate("products");
+
+    return res.status(200).json({ success: true, orders });
   } catch (error) {
     res
       .status(500)
