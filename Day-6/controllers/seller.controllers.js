@@ -1,3 +1,4 @@
+import OrderModel from "../models/orders.schema.js";
 import ProductModel from "../models/product.schema.js";
 
 export const addProduct = async (req, res) => {
@@ -66,6 +67,33 @@ export const updateProduct = async (req, res) => {
     }
     return res.status(200).json({ products });
   } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error", error });
+  }
+};
+
+export const sellerDashboard = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const products = await ProductModel.find({ seller: userId });
+
+    const orders = await OrderModel.find({
+      products: {
+        $in: await ProductModel.find({ seller: userId }).select("_id"),
+      },
+    }).populate("products");
+
+    orders.forEach((order) => {
+      order.products = order.products.filter((pro) => pro.seller == userId);
+    });
+
+    const data = {
+      productsCount: products.length,
+      orders,
+      ordersCount: orders.length,
+    };
+    return res.status(200).json({ data, success: true });
+  } catch (error) {
+    console.error("Error in sellerDashboard:", error);
     return res.status(500).json({ message: "Internal Server Error", error });
   }
 };
