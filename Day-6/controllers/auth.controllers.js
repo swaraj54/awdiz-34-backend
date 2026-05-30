@@ -75,7 +75,11 @@ export const Login = async (req, res) => {
       process.env.JWT_SECRET,
     );
     console.log(token, "token");
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
 
     const userData = {
       name: user.name,
