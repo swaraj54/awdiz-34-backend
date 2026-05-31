@@ -99,7 +99,8 @@ export const singleProduct = async (req, res) => {
 export const groupingProducts = async (req, res) => {
   try {
     const products = await ProductModel.aggregate([
-      { $match: { price: { $in: [1000, 1200] } } },
+      // { $match: { price: { $in: [1000, 1200] } } },
+      { $match: { price: { $gt: 1000 } } },
     ]);
     res
       .status(200)
