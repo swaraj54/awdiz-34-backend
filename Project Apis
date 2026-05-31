@@ -4,7 +4,7 @@ User
 -pagination
 -sorting
 -search
--get all product
+-get all product : approvedByAdmin : true 
 -single product
 -cart
 -orders
@@ -18,10 +18,10 @@ auth - bcrypt - hash compare // jwt - sign verify FUllY COMPLETED
 -logout - remove token and user data from redux
 
 Seller
--add product 
+-add product approvedByAdmin : false
 -get products 
--dashboard  - not completed
--Order Page   - not completed
+-dashboard  
+-Order Page  
 
 assignment - edit product , product approve system with admin
 
@@ -30,3 +30,4 @@ Admin  - not completed
 -get all users
 -get all sellers
 -get all products
+- approve product -> product who having approvedByAdmin : false

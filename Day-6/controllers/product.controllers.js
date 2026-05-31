@@ -95,3 +95,16 @@ export const singleProduct = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const groupingProducts = async (req, res) => {
+  try {
+    const products = await ProductModel.aggregate([
+      { $match: { price: { $in: [1000, 1200] } } },
+    ]);
+    res
+      .status(200)
+      .json({ message: "Products grouped successfully", products });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
