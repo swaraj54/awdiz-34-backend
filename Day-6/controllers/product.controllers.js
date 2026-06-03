@@ -1,4 +1,5 @@
 import ProductModel from "../models/product.schema.js";
+import UserModel from "../models/user.schema.js";
 
 export const sortProducts = async (req, res) => {
   try {
@@ -122,9 +123,19 @@ export const groupingProducts = async (req, res) => {
         },
       },
     ]);
+
+    const usersData = await UserModel.aggregate([
+      {
+        $group: {
+          _id: "$role",
+          totalUsers: { $sum: 1 },
+          
+        },
+      },
+    ]);
     res
       .status(200)
-      .json({ message: "Products grouped successfully", products });
+      .json({ message: "Products grouped successfully", products, usersData });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
