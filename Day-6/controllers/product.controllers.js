@@ -96,11 +96,31 @@ export const singleProduct = async (req, res) => {
   }
 };
 
-export const groupingProducts = async (req, res) => {
+export const matchingProducts = async (req, res) => {
   try {
     const products = await ProductModel.aggregate([
       // { $match: { price: { $in: [1000, 1200] } } },
       { $match: { price: { $gt: 1000 } } },
+    ]);
+    res
+      .status(200)
+      .json({ message: "Products matched successfully", products });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const groupingProducts = async (req, res) => {
+  try {
+    const products = await ProductModel.aggregate([
+      {
+        $group: {
+          _id: "$category",
+          totalProducts: { $sum: 1 },
+          totalQuantity: { $sum: "$stock" },
+          totalPrice: { $sum: { $multiply: ["$price", "$stock"] } },
+        },
+      },
     ]);
     res
       .status(200)
