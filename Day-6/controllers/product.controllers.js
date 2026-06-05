@@ -129,13 +129,55 @@ export const groupingProducts = async (req, res) => {
         $group: {
           _id: "$role",
           totalUsers: { $sum: 1 },
-          
         },
       },
     ]);
     res
       .status(200)
       .json({ message: "Products grouped successfully", products, usersData });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateProductsWithTags = async (req, res) => {
+  try {
+    const products = await ProductModel.updateMany(
+      { $and: [{ price: { $gt: 1500 } }, { price: { $lt: 10000 } }] },
+      { $addToSet: { tags: ["best seller"] } },
+    );
+    res
+      .status(200)
+      .json({ message: "Products updated successfully", products });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const unwindProducts = async (req, res) => {
+  try {
+    const products = await ProductModel.aggregate([
+      { $match: { price: { $gte: 10000 } } },
+      { $unwind: "$tags" },
+      { $group: { _id: "$tags", totalProducts: { $sum: 1 } } },
+    ]);
+    res
+      .status(200)
+      .json({ message: "Products unwound successfully", products });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const projectingProducts = async (req, res) => {
+  try {
+    const products = await ProductModel.aggregate([
+      { $match: { price: { $gte: 10000 } } },
+      { $project: { name: 1, price: 1, image: 1 } },
+    ]);
+    res
+      .status(200)
+      .json({ message: "Products projected successfully", products });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

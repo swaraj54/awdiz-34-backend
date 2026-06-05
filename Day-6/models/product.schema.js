@@ -16,6 +16,7 @@ const ProductSchema = new Schema({
     ref: "users",
     required: true,
   },
+  tags: [{ type: String }],
 });
 
 const ProductModel = model("products", ProductSchema);
